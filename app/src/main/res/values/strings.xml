@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Property Search</string>
+    <string name="for_sale">For Sale</string>
+    <string name="for_rent">For Rent</string>
+    <string name="No_Internet_Connection">No Internet Connection</string>
+    <string name="went_wrong">Something went wrong, please try again</string>
+    <string name="city">City</string>
+    <string name="area">Area</string>
+    <string name="type">Type</string>
+    <string name="max_price">Max.Price</string>
+    <string name="min_price">Min.Price</string>
+    <string name="search">Search</string>
+    <string name="Please_select_city">Please select section, city, area and type</string>
+    <string name="map">map</string>
+    <string name="id">ID</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="home">Home</string>
+    <string name="details">Details</string>
+    <string name="results">Results</string>
+    <string name="unavailable_data">Unavailable Data</string>
+    <string name="unavailable_areas">Unavailable Area</string>
+    <string name="building_photo">building photo</string>
+    <string name="photo">Photo</string>
+
+
+</resources>

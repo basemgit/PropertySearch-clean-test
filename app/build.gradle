@@ -1,0 +1,146 @@
+//noinspection GradleCompatible
+//noinspection GradleCompatible
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
+
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'basem.com.propertysearch.testing.OpenClass'
+}
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "basem.com.propertysearch"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+   // implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
+
+    //noinspection GradleCompatible
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation  'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation  'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation  'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    // Dagger 2
+  /*  annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    annotationProcessor "com.google.dagger:dagger-android-processor:2.13"*/
+
+    kapt 'com.google.dagger:dagger-compiler:2.13'
+    kapt "com.google.dagger:dagger-android-processor:2.13" 
+
+    implementation 'com.google.dagger:dagger:2.13'
+    implementation "com.google.dagger:dagger-android-support:2.13"
+
+    // RX Android
+    implementation  "io.reactivex.rxjava2:rxandroid:2.0.1"
+    implementation  "io.reactivex.rxjava2:rxjava:2.0.1"
+    implementation  "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+
+
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha02'
+
+
+
+    // testing
+
+    implementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.ext.espressoVersion"
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    testImplementation "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
+    testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
+    testImplementation "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
+    testImplementation "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
+
+    // Android Testing Support Library's runner and rules
+    androidTestImplementation "com.android.support.test:runner:$rootProject.ext.runnerVersion"
+    androidTestImplementation "com.android.support.test:rules:$rootProject.ext.rulesVersion"
+
+    // Espresso UI Testing dependencies.
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
+    implementation "com.google.guava:guava:$rootProject.guavaVersion"
+    // optional - Test helpers for LiveData
+    testImplementation "android.arch.core:core-testing:1.1.1"
+    /*testImplementation("android.arch.core:core-testing:1.1.1", {
+        exclude group: 'com.android.support', module: 'support-compat'
+       exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+    })*/
+
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+
+
+}
+
+/*
+Resolves dependency versions across test and production APKs, specifically, transitive
+dependencies. This is required since Espresso internally has a dependency on support-annotations.
+*/
+
+/*configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+}*/
+configurations.all{
+    resolutionStrategy {
+        force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+    }
+}
+
+// we need all open to run tests which  a we enable only for debug builds.
+project.tasks.whenTaskAdded {
+    if (it.name == "testReleaseUnitTest") {
+        it.enabled = false
+    }
+}
